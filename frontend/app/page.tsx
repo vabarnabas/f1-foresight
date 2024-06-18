@@ -51,7 +51,7 @@ export default function Home() {
           : null}
       </div>
       <SignedOut>
-        <div className="rounded-lg bg-f1-red py-4 px-4 mt-12 flex md:items-center justify-between flex-col md:flex-row gap-y-6">
+        <div className="rounded-lg bg-f1-red py-4 px-4 mt-8 flex md:items-center justify-between flex-col md:flex-row gap-y-6">
           <div className="flex gap-x-4">
             <RiSparkling2Fill className="text-5xl" />
             <div className="">

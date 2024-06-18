@@ -1,5 +1,4 @@
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import { Inter } from "next/font/google";
 import Link from "next/link";
 import React from "react";
 import { FaUserShield } from "react-icons/fa";
@@ -10,7 +9,7 @@ export default function Navbar() {
       <div className="w-full max-w-[1280px] flex justify-between items-center md:px-8 px-6">
         <Link href={"/"}>
           <button className="font-bold text-xl">
-            F1® Foresight <span className="text-f1-red">2024</span>
+            F1® Foresight <span className="text-f1-red">24</span>
           </button>
         </Link>
         <SignedOut>

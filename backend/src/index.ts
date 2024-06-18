@@ -4,6 +4,7 @@ import { RaceController } from "./controllers/race.controller";
 import { DriverController } from "./controllers/driver.controller";
 import { cors } from "hono/cors";
 import { PredictionController } from "./controllers/prediction.controller";
+import { logger } from "hono/logger";
 
 const app = new Hono();
 
@@ -12,6 +13,7 @@ app.get("/", (c) => {
 });
 
 app.use(cors());
+app.use(logger());
 
 app.route("/races", RaceController);
 app.route("/drivers", DriverController);

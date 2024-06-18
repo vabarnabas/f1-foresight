@@ -1,3 +1,4 @@
+import { Prediction, Race } from "@prisma/client";
 import { CreatePredictionDto } from "../dto/create-prediction.dto";
 import { prisma } from "../prisma";
 
@@ -18,8 +19,21 @@ export class PredictionService {
     return await prisma.prediction.findFirst({ where: { raceId, userId } });
   }
 
+  async findPodium(prediction: Prediction) {
+    const drivers = await Promise.all(
+      prediction.result.map(async (id) => {
+        return await prisma.driver.findUnique({
+          where: { id },
+          include: { team: true },
+        });
+      })
+    );
+
+    return prediction.result.map((id) => drivers.find((d) => d!.id === id));
+  }
+
   async findMy(userId: string) {
-    return await prisma.prediction.findMany({ where: { userId } });
+    return await prisma.prediction.findMany({ where: { userId: userId } });
   }
 
   async create(dto: CreatePredictionDto) {
