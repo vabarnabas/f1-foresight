@@ -4,8 +4,10 @@ import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { zValidator } from "@hono/zod-validator";
 import { createPredictionSchema } from "../dto/create-prediction.dto";
 import { authMiddleware } from "../middleware/auth.middleware";
+import { RaceService } from "../services/race.service";
 
 const predictionService = new PredictionService();
+const raceService = new RaceService();
 export const PredictionController = new Hono();
 
 PredictionController.use(clerkMiddleware());
@@ -17,8 +19,6 @@ PredictionController.get("/", async (c) => {
 
 PredictionController.get("/me", async (c) => {
   const user = getAuth(c);
-
-  console.log("user", user);
 
   if (!user?.userId) return c.json({ message: "Unauthorized" }, 401);
 
@@ -41,16 +41,20 @@ PredictionController.get("/race/:raceId", async (c) => {
 PredictionController.get("/podium/race/:raceId/user/:userId", async (c) => {
   const { raceId, userId } = c.req.param();
 
-  console.log("asd", userId, raceId);
-
   const prediction = await predictionService.findByRaceAndUser(raceId, userId);
 
   if (!prediction) {
     return c.json({ message: "Prediction Not Found" }, 404);
   }
 
+  const race = await raceService.findSpecific(raceId);
+
+  if (!race) {
+    return c.json({ message: "Race Not Found" }, 404);
+  }
+
   const podium = await predictionService.findPodium(prediction);
-  return c.json(podium);
+  return c.json({ podium, race });
 });
 
 PredictionController.get("/my", async (c) => {

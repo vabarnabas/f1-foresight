@@ -24,16 +24,19 @@ export default function Predictions() {
   if (predictionsIsValidating) return <div>Loading...</div>;
 
   return (
-    <div>
-      {predictions
-        ? predictions.map((prediction) => (
-            <Podium
-              key={prediction.id}
-              raceId={prediction.raceId}
-              userId={prediction.userId}
-            />
-          ))
-        : null}
+    <div className="">
+      <p className="text-3xl font-bold">My Predictions</p>
+      <div className="flex flex-col gap-y-4 mt-8">
+        {predictions
+          ? predictions.map((prediction) => (
+              <Podium
+                key={prediction.id}
+                raceId={prediction.raceId}
+                userId={prediction.userId}
+              />
+            ))
+          : null}
+      </div>
     </div>
   );
 }
