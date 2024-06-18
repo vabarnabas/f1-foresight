@@ -7,8 +7,6 @@ import Navbar from "@/components/navbar/navbar";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
 
-import "/node_modules/flag-icons/css/flag-icons.min.css";
-
 const font = localFont({
   src: [
     {
@@ -23,8 +21,6 @@ const font = localFont({
     },
   ],
 });
-
-export const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
