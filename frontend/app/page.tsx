@@ -30,8 +30,8 @@ export default function Home() {
       <div className="grid md:grid-cols-2 gap-y-6 gap-x-4 mt-6">
         {data
           ? data.map((race: Race) => (
-              <Link key={race.id} href={`/race/${race.id}`}>
-                <div className="flex gap-x-6 items-center hover:bg-slate-100/10 px-4 py-2 rounded-lg cursor-pointer">
+              <Link key={race.id} href={`/races/${race.id}`}>
+                <button className="text-left flex gap-x-6 items-center hover:bg-slate-100/10 px-4 py-2 rounded-lg cursor-pointer">
                   <Image
                     src={`/flags/${race.countryCode.toLowerCase()}.svg`}
                     width={72}
@@ -45,7 +45,7 @@ export default function Home() {
                     <p className="font-bold text-lg">{race.name}</p>
                     <p className="">{`${race.country} - ${race.city}`}</p>
                   </div>
-                </div>
+                </button>
               </Link>
             ))
           : null}

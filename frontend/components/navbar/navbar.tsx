@@ -9,9 +9,9 @@ export default function Navbar() {
     <div className="fixed inset-x-0 h-16 flex justify-center items-center z-30 bg-f1-black/80 backdrop-blur-xl">
       <div className="w-full max-w-[1280px] flex justify-between items-center md:px-8 px-6">
         <Link href={"/"}>
-          <p className="font-bold text-xl">
+          <button className="font-bold text-xl">
             F1® Foresight <span className="text-f1-red">2024</span>
-          </p>
+          </button>
         </Link>
         <SignedOut>
           <SignInButton>

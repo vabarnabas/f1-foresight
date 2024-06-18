@@ -96,8 +96,8 @@ export default function RaceView() {
     <div>
       <div id="capture" ref={componentRef}>
         {raceData ? (
-          <div className="flex gap-x-6 justify-between">
-            <div className="flex gap-x-6 items-start rounded-lg cursor-pointer">
+          <div className="flex gap-x-6 justify-between items-center">
+            <div className="flex gap-x-6 items-center rounded-lg cursor-pointer">
               <Image
                 src={`/flags/${raceData.countryCode.toLowerCase()}.svg`}
                 width={72}
@@ -129,6 +129,11 @@ export default function RaceView() {
                 SAVE
               </button>
             </SignedIn>
+            <SignedOut>
+              <p className="text-xs opacity-80">
+                Sign In to Save Your Prediction
+              </p>
+            </SignedOut>
           </div>
         ) : null}
         <div className="relative pt-24 flex justify-center items-end gap-x-2">
@@ -194,24 +199,24 @@ export default function RaceView() {
                   <p className="text-sm opacity-80">{driver.team.name}</p>
                 </div>
                 <div className="ml-auto flex items-center gap-x-4 text-xl select-none">
-                  <p
+                  <button
                     onClick={() => handlePlaceChange("1st", driver)}
                     className="text-trophy-gold cursor-pointer"
                   >
                     P1
-                  </p>
-                  <p
+                  </button>
+                  <button
                     onClick={() => handlePlaceChange("2nd", driver)}
                     className="text-trophy-silver cursor-pointer"
                   >
                     P2
-                  </p>
-                  <p
+                  </button>
+                  <button
                     onClick={() => handlePlaceChange("3rd", driver)}
                     className="text-trophy-bronze cursor-pointer"
                   >
                     P3
-                  </p>
+                  </button>
                 </div>
               </div>
             ))}
