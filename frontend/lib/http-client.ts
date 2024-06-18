@@ -1,3 +1,3 @@
 import { HttpClient } from "./request";
 
-export const httpClient = new HttpClient("http://localhost:8888");
+export const httpClient = new HttpClient(process.env.NEXT_PUBLIC_API_URL!);
