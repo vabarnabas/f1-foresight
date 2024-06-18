@@ -2,11 +2,14 @@
 import { httpClient } from "@/lib/http-client";
 import { SWROptions } from "@/lib/swr-const";
 import { Race } from "@/types/race.types";
-import { SignInButton, SignedOut } from "@clerk/nextjs";
+import { SignInButton, SignedIn, SignedOut } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { FaUserShield } from "react-icons/fa";
+import { IoIosPodium } from "react-icons/io";
+import { IoPodium } from "react-icons/io5";
 import { RiSparkling2Fill } from "react-icons/ri";
+import { TbExternalLink } from "react-icons/tb";
 import useSWR from "swr";
 
 export default function Home() {
@@ -26,6 +29,25 @@ export default function Home() {
 
   return (
     <div className="">
+      <SignedIn>
+        <div className="rounded-lg bg-f1-red py-4 px-4 mb-8 flex md:items-center justify-between flex-col md:flex-row gap-y-6">
+          <div className="flex gap-x-4">
+            <IoIosPodium className="text-5xl" />
+            <div className="">
+              <p className="font-bold">Check Your Predictions</p>
+              <p className="text-sm mt-0.5">
+                Go and check your predictions for the upcoming Formula 1® races
+              </p>
+            </div>
+          </div>
+          <Link href={"/predictions"}>
+            <button className="px-4 py-2.5 rounded-md text-xs bg-white hover:bg-slate-200 text-f1-black flex items-center gap-x-1">
+              <TbExternalLink className="text-lg" />
+              OPEN
+            </button>
+          </Link>
+        </div>
+      </SignedIn>
       <p className="text-3xl font-bold">Select Race</p>
       <div className="grid md:grid-cols-2 gap-y-6 gap-x-4 mt-6">
         {data
