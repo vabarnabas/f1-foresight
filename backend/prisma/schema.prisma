@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Season {
+  id    String @id @default(uuid())
+  name  String
+  races Race[]
+}
+
+model Race {
+  id          String       @id @default(uuid())
+  name        String
+  country     String
+  city        String
+  countryCode String
+  seasonId    String
+  startDate   DateTime
+  endDate     DateTime
+  season      Season       @relation(fields: [seasonId], references: [id])
+  predictions Prediction[]
+}
+
+model Team {
+  id        String   @id @default(uuid())
+  name      String
+  teamColor String
+  drivers   Driver[]
+}
+
+model Driver {
+  id          String @id @default(uuid())
+  fullName    String
+  number      Int
+  countryCode String
+  teamId      String
+  team        Team   @relation(fields: [teamId], references: [id])
+}
+
+model Prediction {
+  id     String   @id @default(uuid())
+  userId String
+  name   String
+  raceId String
+  race   Race     @relation(fields: [raceId], references: [id])
+  result String[]
+}
