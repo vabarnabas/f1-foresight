@@ -24,7 +24,10 @@ export default function Podium({ raceId, userId }: Props) {
     { ...SWROptions }
   );
 
-  if (!data) return null;
+  if (!data)
+    return (
+      <div className="bg-f1-black-lighter pt-6 px-6 rounded-lg h-80 animate-pulse"></div>
+    );
 
   return (
     <div className="bg-f1-black-lighter pt-6 px-6 rounded-lg">
@@ -48,7 +51,7 @@ export default function Podium({ raceId, userId }: Props) {
       <div className="relative pt-24 flex justify-center items-end gap-x-2">
         <div
           style={{ background: data.podium[1]?.team.teamColor }}
-          className="cursor-pointer relative h-52 w-40 bg-f1-black-lighter rounded-t-lg p-4 text-2xl font-bold"
+          className="cursor-pointer relative h-40 md:h-52 w-40 text-center bg-f1-black-lighter rounded-t-lg p-4 text-2xl font-bold"
         >
           2ND
           {data.podium[1] ? (
@@ -59,7 +62,7 @@ export default function Podium({ raceId, userId }: Props) {
         </div>
         <div
           style={{ background: data.podium[0]?.team.teamColor }}
-          className="cursor-pointer relative h-60 w-40 bg-f1-black-lighter rounded-t-lg p-4 text-2xl font-bold"
+          className="cursor-pointer relative h-48 md:h-60 w-40 text-center bg-f1-black-lighter rounded-t-lg p-4 text-2xl font-bold"
         >
           1ST
           {data.podium[0] ? (
@@ -70,7 +73,7 @@ export default function Podium({ raceId, userId }: Props) {
         </div>
         <div
           style={{ background: data.podium[2]?.team.teamColor }}
-          className="cursor-pointer relative h-44 w-40 bg-f1-black-lighter rounded-t-lg p-4 text-2xl font-bold"
+          className="cursor-pointer relative h-32 text-center md:h-44 w-40 bg-f1-black-lighter rounded-t-lg p-4 text-2xl font-bold"
         >
           3RD
           {data.podium[2] ? (
