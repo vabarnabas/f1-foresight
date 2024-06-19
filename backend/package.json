@@ -11,6 +11,7 @@
     "@hono/zod-validator": "^0.2.2",
     "@prisma/client": "5.15.0",
     "hono": "^4.4.6",
+    "openai": "^4.51.0",
     "prisma": "^5.15.0",
     "zod": "^3.23.8"
   },

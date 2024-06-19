@@ -3,14 +3,17 @@ import { PredictionService } from "../services/prediction.service";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { zValidator } from "@hono/zod-validator";
 import { createPredictionSchema } from "../dto/create-prediction.dto";
-import { authMiddleware } from "../middleware/auth.middleware";
 import { RaceService } from "../services/race.service";
+import { authMiddleware } from "../middleware/auth.middleware";
+import { QuotaService } from "../services/quota.service";
 
 const predictionService = new PredictionService();
 const raceService = new RaceService();
+const quotaService = new QuotaService();
 export const PredictionController = new Hono();
 
 PredictionController.use(clerkMiddleware());
+PredictionController.use(authMiddleware);
 
 PredictionController.get("/", async (c) => {
   const predictions = await predictionService.findAll();
@@ -57,15 +60,6 @@ PredictionController.get("/podium/race/:raceId/user/:userId", async (c) => {
   return c.json({ podium, race });
 });
 
-PredictionController.get("/my", async (c) => {
-  const user = getAuth(c);
-
-  if (!user) return c.json({ message: "Unauthorized" }, 401);
-
-  const predictions = await predictionService.findMy(user.userId!);
-  return c.json(predictions);
-});
-
 PredictionController.post(
   "/",
   zValidator("json", createPredictionSchema),
@@ -89,3 +83,28 @@ PredictionController.post(
     return c.json(prediction);
   }
 );
+
+PredictionController.get("/analyze/:id", async (c) => {
+  const id = c.req.param("id");
+  const user = getAuth(c);
+
+  if (!user?.userId) return c.json({ message: "Unauthorized" }, 401);
+
+  const isInQuotaLimit = await quotaService.checkQuota(user.userId);
+
+  if (isInQuotaLimit) {
+    const prediction = await predictionService.findSpecific(id);
+
+    if (!prediction) {
+      return c.json({ message: "Prediction Not Found" }, 404);
+    }
+
+    const chat = await predictionService.analyze(prediction);
+    await quotaService.createOrUpdate(user.userId);
+    return c.json({
+      ...JSON.parse(chat.choices[0].message.content!),
+    });
+  } else {
+    return c.json({ message: "Quota Limit Reached" }, 403);
+  }
+});

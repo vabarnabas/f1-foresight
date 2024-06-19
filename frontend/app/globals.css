@@ -9,3 +9,7 @@ html {
 #capture {
   line-height: 1 !important;
 }
+
+.markdown > * {
+  all: revert;
+}

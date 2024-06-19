@@ -1,5 +1,5 @@
 "use client";
-import Podium from "@/components/podium/podium";
+import PodiumCard from "@/components/podium/podium-card";
 import { httpClient } from "@/lib/http-client";
 import { SWROptions } from "@/lib/swr-const";
 import { Prediction } from "@/schemas/prediction.types";
@@ -21,16 +21,18 @@ export default function Predictions() {
     { ...SWROptions }
   );
 
-  if (predictionsIsValidating) return <div>Loading...</div>;
+  if (predictionsIsValidating)
+    return <div className="flex justify-center items-center">Loading...</div>;
 
   return (
     <div className="">
       <p className="text-3xl font-bold">My Predictions</p>
-      <div className="flex flex-col gap-y-4 mt-8">
+      <div className="flex flex-col gap-y-2 mt-8">
         {predictions
           ? predictions.map((prediction) => (
-              <Podium
+              <PodiumCard
                 key={prediction.id}
+                id={prediction.id}
                 raceId={prediction.raceId}
                 userId={prediction.userId}
               />

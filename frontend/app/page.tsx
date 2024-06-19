@@ -1,4 +1,5 @@
 "use client";
+import Callout from "@/components/callout/callout";
 import { httpClient } from "@/lib/http-client";
 import { SWROptions } from "@/lib/swr-const";
 import { Race } from "@/types/race.types";
@@ -22,6 +23,8 @@ export default function Home() {
     { ...SWROptions }
   );
 
+  console.log(data);
+
   if (isValidating)
     return <div className="flex  justify-center items-center">Loading...</div>;
 
@@ -30,23 +33,21 @@ export default function Home() {
   return (
     <div className="">
       <SignedIn>
-        <div className="rounded-lg bg-f1-red py-4 px-4 mb-8 flex md:items-center justify-between flex-col md:flex-row gap-y-6">
-          <div className="flex gap-x-4">
-            <IoIosPodium className="text-5xl" />
-            <div className="">
-              <p className="font-bold">Check Your Predictions</p>
-              <p className="text-sm mt-0.5">
-                Go and check your predictions for the upcoming Formula 1® races
-              </p>
-            </div>
-          </div>
-          <Link href={"/predictions"}>
-            <button className="px-4 py-2.5 rounded-md text-xs bg-white hover:bg-slate-200 text-f1-black flex items-center gap-x-1">
-              <TbExternalLink className="text-lg" />
-              OPEN
-            </button>
-          </Link>
-        </div>
+        <Callout
+          className="mb-8"
+          color="bg-f1-red"
+          icon={<IoIosPodium className="text-5xl" />}
+          title="Check Your Predictions"
+          subTitle="Go and check your predictions for the upcoming Formula 1® races"
+          button={
+            <Link href={"/predictions"}>
+              <button className="px-4 py-2.5 rounded-md text-xs bg-white hover:bg-slate-200 text-f1-black flex items-center gap-x-1">
+                <TbExternalLink className="text-lg" />
+                OPEN
+              </button>
+            </Link>
+          }
+        />
       </SignedIn>
       <p className="text-3xl font-bold">Select Race</p>
       <div className="grid md:grid-cols-2 gap-y-6 gap-x-4 mt-6">

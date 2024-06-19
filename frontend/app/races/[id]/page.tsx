@@ -5,7 +5,6 @@ import { SWROptions } from "@/lib/swr-const";
 import { CreatePredictionDto } from "@/schemas/create-prediction.schema";
 import { Driver } from "@/types/driver.types";
 import { SignedIn, SignedOut, useAuth, useUser } from "@clerk/nextjs";
-import { auth, currentUser, getAuth } from "@clerk/nextjs/server";
 import html2canvas from "html2canvas";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
@@ -88,10 +87,6 @@ export default function RaceView() {
   if (driverIsValidating || raceIsValidating)
     return <div className="flex  justify-center items-center">Loading...</div>;
 
-  console.log(
-    isMutating || Object.values(podium).some((driver) => driver === null)
-  );
-
   return (
     <div>
       <div id="capture" ref={componentRef}>
@@ -119,8 +114,8 @@ export default function RaceView() {
                 onClick={async () =>
                   toast.promise(trigger(), {
                     loading: "Saving...",
-                    success: "Saved!",
-                    error: "Error!",
+                    success: "Saved",
+                    error: "Error",
                   })
                 }
                 className="h-max px-4 py-2.5 rounded-md text-xs disabled:cursor-not-allowed bg-white enabled:hover:bg-slate-200 disabled:opacity-80 text-f1-black flex items-center gap-x-1"

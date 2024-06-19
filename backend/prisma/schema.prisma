@@ -56,3 +56,21 @@ model Prediction {
   race   Race     @relation(fields: [raceId], references: [id])
   result String[]
 }
+
+model Analysis {
+  id             String   @id @default(uuid())
+  result         String[]
+  raceId         String
+  analysis       String
+  goodArguments  String
+  onTheOtherHand String
+  conclusion     String
+
+  @@unique([raceId, result])
+}
+
+model Quota {
+  id         String @id @default(uuid())
+  userId     String @unique
+  usedAmount Int
+}
