@@ -28,7 +28,7 @@ export default function SpecificPrediction() {
     { ...SWROptions }
   );
 
-  const { trigger, data, isMutating } = useSWRMutation(
+  const { trigger, data } = useSWRMutation(
     `/predictions/analyze/${id}`,
     async (url: string) => {
       const token = await getToken();
@@ -41,7 +41,11 @@ export default function SpecificPrediction() {
   );
 
   if (predictionIsValidating)
-    return <div className="flex justify-center items-center">Loading...</div>;
+    return (
+      <div className="flex justify-center items-center flex-grow">
+        Loading...
+      </div>
+    );
 
   return (
     <div>

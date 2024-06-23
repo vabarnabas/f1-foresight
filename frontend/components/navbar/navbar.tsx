@@ -21,7 +21,14 @@ export default function Navbar() {
           </SignInButton>
         </SignedOut>
         <SignedIn>
-          <UserButton />
+          <div className="font-inter">
+            <UserButton
+              appearance={{ variables: { fontFamily: "var(--font-sans)" } }}
+              userProfileProps={{
+                appearance: { variables: { fontFamily: "var(--font-sans)" } },
+              }}
+            />
+          </div>
         </SignedIn>
       </div>
     </div>

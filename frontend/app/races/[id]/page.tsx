@@ -85,7 +85,11 @@ export default function RaceView() {
   );
 
   if (driverIsValidating || raceIsValidating)
-    return <div className="flex  justify-center items-center">Loading...</div>;
+    return (
+      <div className="flex flex-grow justify-center items-center">
+        Loading...
+      </div>
+    );
 
   return (
     <div>
