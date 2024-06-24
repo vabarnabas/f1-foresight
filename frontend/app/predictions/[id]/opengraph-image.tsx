@@ -1,3 +1,6 @@
+import { httpClient } from "@/lib/http-client";
+import { useAuth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
@@ -11,13 +14,20 @@ export const size = {
 export const contentType = "image/png";
 
 export default async function Image({ params }: { params: { id: string } }) {
-  const prediction = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/predictions/${params.id}`
-  ).then((res) => res.json());
+  const { getToken } = auth();
+  const token = await getToken();
 
-  const podium = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/predictions/podium/race/${prediction.raceId}/user/${prediction.userId}`
-  ).then((res) => res.json());
+  const { data: prediction } = await httpClient.get(
+    `/predictions/${params.id}`,
+    { token: token! }
+  );
+
+  console.log(prediction);
+
+  // const { data: podium } = await httpClient.get(
+  //   `/predictions/podium/race/${prediction.raceId}/user/${prediction.userId}`,
+  //   { token: token! }
+  // );
 
   const f1Font = fetch(
     new URL("/public/font/f1_black.woff2", import.meta.url)
@@ -37,7 +47,7 @@ export default async function Image({ params }: { params: { id: string } }) {
           justifyContent: "center",
         }}
       >
-        {podium.race.name}
+        {JSON.stringify(prediction)}
       </div>
     ),
     // ImageResponse options
@@ -47,7 +57,7 @@ export default async function Image({ params }: { params: { id: string } }) {
       ...size,
       fonts: [
         {
-          name: "Inter",
+          name: "F1 Font",
           data: await f1Font,
           style: "normal",
           weight: 400,
