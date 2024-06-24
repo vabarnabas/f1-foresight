@@ -24,8 +24,8 @@ export default async function Image({ params }: { params: { id: string } }) {
 
   return new ImageResponse(
     (
-      <div tw="flex flex-col h-full w-full justify-end items-center bg-[#16161B] text-white">
-        <h1 tw="absolute text-lg -bottom-1 right-4">
+      <div tw="relative flex flex-col h-full w-full justify-end items-center bg-[#16161B] text-white py-2 px-8">
+        <h1 tw="absolute text-lg -bottom-1 right-8">
           F1® Foresight <span tw="text-[#e92300]">24</span>
         </h1>
         <div tw="flex">
