@@ -12,8 +12,9 @@ import useSWRMutation from "swr/mutation";
 import { useAuth } from "@clerk/nextjs";
 import { toast } from "sonner";
 import Markdown from "react-markdown";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaShareAlt } from "react-icons/fa";
 import Link from "next/link";
+import { IoIosShareAlt } from "react-icons/io";
 
 export default function SpecificPrediction() {
   const { id } = useParams();
@@ -39,7 +40,7 @@ export default function SpecificPrediction() {
         token: token!,
       });
       return data;
-    },
+    }
   );
 
   if (predictionIsValidating)
@@ -51,11 +52,18 @@ export default function SpecificPrediction() {
 
   return (
     <div>
-      <p className="text-3xl font-bold flex items-center gap-x-2">
+      <p className="text-3xl font-bold flex items-center gap-x-3">
         <Link href="/predictions">
           <FaArrowLeft className="text-2xl" />
         </Link>
-        Analyze Prediction
+        My Prediction
+        <Link
+          href={`/predictions/share/${id}`}
+          className="ml-auto font-normal px-4 py-2.5 rounded-md text-xs bg-white hover:bg-slate-200 text-f1-black flex items-center gap-x-1"
+        >
+          <IoIosShareAlt className="text-lg" />
+          SHARE
+        </Link>
       </p>
       <div className="flex flex-col gap-y-2 mt-8">
         {predictionData ? (

@@ -6,6 +6,7 @@ import { createPredictionSchema } from "../dto/create-prediction.dto";
 import { RaceService } from "../services/race.service";
 import { authMiddleware } from "../middleware/auth.middleware";
 import { QuotaService } from "../services/quota.service";
+import { clerkClient } from "@clerk/clerk-sdk-node";
 
 const predictionService = new PredictionService();
 const raceService = new RaceService();
@@ -76,7 +77,10 @@ PredictionController.get(
     }
 
     const podium = await predictionService.findPodium(prediction);
-    return c.json({ podium, race });
+    return c.json({
+      podium,
+      race,
+    });
   }
 );
 
@@ -119,8 +123,21 @@ PredictionController.get("/podium/:id", async (c) => {
     return c.json({ message: "Prediction Not Found" }, 404);
   }
 
+  const user = await clerkClient.users.getUser(prediction.userId);
+
+  if (!user) {
+    return c.json({ message: "User Not Found" }, 404);
+  }
+
   const podium = await predictionService.findPodium(prediction);
-  return c.json({ podium: podium, race: prediction.race });
+  return c.json({
+    podium: podium,
+    race: prediction.race,
+    user: {
+      userName: user.username,
+      imageUrl: user.imageUrl,
+    },
+  });
 });
 
 PredictionController.post(

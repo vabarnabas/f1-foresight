@@ -5,41 +5,58 @@ import { Race } from "@/types/race.types";
 import { useAuth } from "@clerk/nextjs";
 import Image from "next/image";
 import React from "react";
-import { RiSparkling2Fill } from "react-icons/ri";
 import useSWR from "swr";
 import Podium from "./podium";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-interface Props {
+interface BaseProps {
   id: string;
-  raceId: string;
-  userId: string;
   noBackground?: boolean;
   nonClickable?: boolean;
 }
+
+interface WithRaceAndUser extends BaseProps {
+  raceId: string;
+  userId: string;
+  customData?: never;
+}
+
+interface WithCustomData extends BaseProps {
+  raceId?: never;
+  userId?: never;
+  customData: { podium: Driver[]; race: Race };
+}
+
+type Props = WithRaceAndUser | WithCustomData;
 
 export default function PodiumCard({
   id,
   raceId,
   userId,
+  customData,
   noBackground,
   nonClickable,
 }: Props) {
   const router = useRouter();
   const { getToken } = useAuth();
-  const { data, isValidating } = useSWR<{ podium: Driver[]; race: Race }>(
+  const { data: podiumData, isValidating: podiumIsValidating } = useSWR<{
+    podium: Driver[];
+    race: Race;
+  }>(
     `/predictions/podium/race/${raceId}/user/${userId}`,
     async (url) => {
       const token = await getToken();
       const { data } = await httpClient.get(url, { token: token! });
       return data;
     },
-    { ...SWROptions }
+    { ...SWROptions, isPaused: () => customData !== undefined }
   );
 
-  if (isValidating) {
+  const data = customData || podiumData;
+
+  if (podiumIsValidating && !customData) {
     return (
       <div className="bg-f1-black-lighter pt-6 px-6 rounded-lg h-80 animate-pulse"></div>
     );
@@ -55,7 +72,7 @@ export default function PodiumCard({
         nonClickable && "pointer-events-none"
       )}
     >
-      {data && data.race ? (
+      {data ? (
         <div className="flex gap-x-6 justify-between items-center">
           <div
             onClick={() => router.push(`/races/${data.race.id}`)}
@@ -70,7 +87,9 @@ export default function PodiumCard({
             />
             <div className="">
               <p className="font-bold text-lg">{data.race.name}</p>
-              <p className="">{`${data.race.country} - ${data.race.city}`}</p>
+              <p className="">{`${(customData || podiumData)!.race.country} - ${
+                data.race.city
+              }`}</p>
             </div>
           </div>
         </div>
