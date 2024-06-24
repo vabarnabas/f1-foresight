@@ -42,11 +42,12 @@ export default function Home() {
           title="Check Your Predictions"
           subTitle="Go and check your predictions for the upcoming Formula 1® races"
           button={
-            <Link href={"/predictions"}>
-              <button className="px-4 py-2.5 rounded-md text-xs bg-white hover:bg-slate-200 text-f1-black flex items-center gap-x-1">
-                <TbExternalLink className="text-lg" />
-                OPEN
-              </button>
+            <Link
+              className="w-full md:w-max px-4 py-2.5 rounded-md text-xs bg-white hover:bg-slate-200 text-f1-black flex items-center gap-x-1"
+              href={"/predictions"}
+            >
+              <TbExternalLink className="text-lg" />
+              OPEN
             </Link>
           }
         />

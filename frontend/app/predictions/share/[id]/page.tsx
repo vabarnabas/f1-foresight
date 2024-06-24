@@ -34,14 +34,14 @@ export default function SpecificPrediction() {
 
   return (
     <div>
-      <div className="flex gap-x-6 justify-between items-center">
+      <div className="flex gap-x-6 justify-between md:items-center flex-col md:flex-row gap-y-2">
         <p className="group text-3xl font-bold flex items-center gap-x-3">
           <Link href="/">
             <FaArrowLeft className="text-2xl hover:-translate-x-1 transition-all ease-in-out duration-150" />
           </Link>
           Prediction
         </p>
-        <div className="w-full flex justify-end gap-x-2 items-center">
+        <div className="flex gap-x-2 items-center">
           <Image
             src={predictionData.user.imageUrl}
             alt={predictionData.user.userName}

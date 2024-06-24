@@ -18,7 +18,7 @@ export default function Podium({ podium, isEditable, handleChange }: Props) {
       <div
         onClick={() => safeHandleChange(1, null)}
         style={{ background: podium[1]?.team.teamColor }}
-        className="cursor-pointer relative h-40 md:h-52 w-40 text-center bg-f1-black-lighter rounded-t-lg p-4 text-2xl font-bold"
+        className="cursor-pointer relative h-[8.5rem] md:h-[12.5rem] w-full md:w-40 text-center bg-f1-black-lighter rounded-t-lg p-4 text-xl md:text-2xl font-bold"
       >
         2ND
         {podium[1] ? (
@@ -30,7 +30,7 @@ export default function Podium({ podium, isEditable, handleChange }: Props) {
       <div
         onClick={() => safeHandleChange(0, null)}
         style={{ background: podium[0]?.team.teamColor }}
-        className="cursor-pointer relative h-48 md:h-60 w-40 text-center bg-f1-black-lighter rounded-t-lg p-4 text-2xl font-bold"
+        className="cursor-pointer relative h-40 md:h-60 w-full md:w-40 text-center bg-f1-black-lighter rounded-t-lg p-4 text-xl md:text-2xl font-bold"
       >
         1ST
         {podium[0] ? (
@@ -42,7 +42,7 @@ export default function Podium({ podium, isEditable, handleChange }: Props) {
       <div
         onClick={() => safeHandleChange(2, null)}
         style={{ background: podium[2]?.team.teamColor }}
-        className="cursor-pointer relative h-32 text-center md:h-44 w-40 bg-f1-black-lighter rounded-t-lg p-4 text-2xl font-bold"
+        className="cursor-pointer relative h-28 text-center md:h-44 w-full md:w-40 bg-f1-black-lighter rounded-t-lg p-4 text-xl md:text-2xl font-bold"
       >
         3RD
         {podium[2] ? (
