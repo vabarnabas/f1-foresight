@@ -7,6 +7,7 @@ export interface Team {
 export interface Driver {
   id: string;
   fullName: string;
+  shortName: string;
   number: number;
   countryCode: string;
   team: Team;

@@ -54,7 +54,7 @@ export default function SpecificPrediction() {
     <div>
       <p className="text-3xl font-bold flex items-center gap-x-3">
         <Link href="/predictions">
-          <FaArrowLeft className="text-2xl" />
+          <FaArrowLeft className="text-2xl hover:-translate-x-1 transition-all ease-in-out duration-150" />
         </Link>
         My Prediction
         <Link

@@ -34,12 +34,25 @@ export default function SpecificPrediction() {
 
   return (
     <div>
-      <p className="text-3xl font-bold flex items-center gap-x-3">
-        <Link href="/">
-          <FaArrowLeft className="text-2xl" />
-        </Link>
-        Prediction
-      </p>
+      <div className="flex gap-x-6 justify-between items-center">
+        <p className="group text-3xl font-bold flex items-center gap-x-3">
+          <Link href="/">
+            <FaArrowLeft className="text-2xl hover:-translate-x-1 transition-all ease-in-out duration-150" />
+          </Link>
+          Prediction
+        </p>
+        <div className="w-full flex justify-end gap-x-2 items-center">
+          <Image
+            src={predictionData.user.imageUrl}
+            alt={predictionData.user.userName}
+            width={22}
+            height={22}
+            className="rounded-full aspect-square h-max"
+            objectFit="cover"
+          />
+          <p className="">{predictionData.user.userName}</p>
+        </div>
+      </div>
       <div className="flex flex-col gap-y-2 mt-8">
         {predictionData ? (
           <div className="flex flex-col">
@@ -48,17 +61,6 @@ export default function SpecificPrediction() {
               id={id as string}
               customData={predictionData}
             />
-            <div className="w-full flex justify-end mt-4 gap-x-2 items-center">
-              <Image
-                src={predictionData.user.imageUrl}
-                alt={predictionData.user.userName}
-                width={22}
-                height={22}
-                className="rounded-full aspect-square h-max"
-                objectFit="cover"
-              />
-              <p className="">{predictionData.user.userName}</p>
-            </div>
           </div>
         ) : null}
       </div>

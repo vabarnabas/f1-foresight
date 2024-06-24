@@ -11,6 +11,8 @@ export default function Podium({ podium, isEditable, handleChange }: Props) {
   const safeHandleChange = (index: number, value: Driver | null) =>
     isEditable && handleChange && handleChange(index, value);
 
+  console.log(podium);
+
   return (
     <div className="relative pt-24 flex justify-center items-end gap-x-2">
       <div
@@ -21,7 +23,7 @@ export default function Podium({ podium, isEditable, handleChange }: Props) {
         2ND
         {podium[1] ? (
           <div className="absolute -top-10 w-full text-center inset-x-0">
-            {podium[1].fullName.split(" ")[1].substring(0, 3)}
+            {podium[1].shortName}
           </div>
         ) : null}
       </div>
@@ -33,7 +35,7 @@ export default function Podium({ podium, isEditable, handleChange }: Props) {
         1ST
         {podium[0] ? (
           <div className="absolute -top-10 w-full text-center inset-x-0">
-            {podium[0].fullName.split(" ")[1].substring(0, 3)}
+            {podium[0].shortName}
           </div>
         ) : null}
       </div>
@@ -45,7 +47,7 @@ export default function Podium({ podium, isEditable, handleChange }: Props) {
         3RD
         {podium[2] ? (
           <div className="absolute -top-10 w-full text-center inset-x-0">
-            {podium[2].fullName.split(" ")[1].substring(0, 3)}
+            {podium[2].shortName}
           </div>
         ) : null}
       </div>

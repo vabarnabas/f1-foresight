@@ -42,6 +42,7 @@ model Team {
 model Driver {
   id          String @id @default(uuid())
   fullName    String
+  shortName   String @default("AAA")
   number      Int
   countryCode String
   teamId      String

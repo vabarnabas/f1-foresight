@@ -84,35 +84,35 @@ PredictionController.get(
   }
 );
 
-// PredictionController.get(
-//   "/podium/race/:raceId/me",
-//   authMiddleware,
-//   async (c) => {
-//     const { raceId } = c.req.param();
+PredictionController.get(
+  "/podium/race/:raceId/me",
+  authMiddleware,
+  async (c) => {
+    const { raceId } = c.req.param();
 
-//     const user = getAuth(c);
+    const user = getAuth(c);
 
-//     if (!user?.userId) return c.json({ message: "Unauthorized" }, 401);
+    if (!user?.userId) return c.json({ message: "Unauthorized" }, 401);
 
-//     const prediction = await predictionService.findByRaceAndUser(
-//       raceId,
-//       user.userId
-//     );
+    const prediction = await predictionService.findByRaceAndUser(
+      raceId,
+      user.userId
+    );
 
-//     if (!prediction) {
-//       return c.json({ message: "Prediction Not Found" }, 404);
-//     }
+    if (!prediction) {
+      return c.json({ message: "Prediction Not Found" }, 404);
+    }
 
-//     const race = await raceService.findSpecific(raceId);
+    const race = await raceService.findSpecific(raceId);
 
-//     if (!race) {
-//       return c.json({ message: "Race Not Found" }, 404);
-//     }
+    if (!race) {
+      return c.json({ message: "Race Not Found" }, 404);
+    }
 
-//     const podium = await predictionService.findPodium(prediction);
-//     return c.json({ podium, race });
-//   }
-// );
+    const podium = await predictionService.findPodium(prediction);
+    return c.json({ podium, race });
+  }
+);
 
 PredictionController.get("/podium/:id", async (c) => {
   const { id } = c.req.param();
