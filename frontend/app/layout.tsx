@@ -50,7 +50,7 @@ export default function RootLayout({
           )}
         >
           <Navbar />
-          <div className="flex flex-grow flex-col w-full max-w-[1280px] px-6 pb-16 pt-24 md:px-8">
+          <div className="flex flex-grow flex-col w-full max-w-[1280px] px-6 pb-4 pt-24 md:px-8">
             {children}
           </div>
           <Footer />
