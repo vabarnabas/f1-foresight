@@ -1,4 +1,5 @@
 "use client";
+import Podium from "@/components/podium/podium";
 import { errorHandler } from "@/lib/error-handler";
 import { httpClient } from "@/lib/http-client";
 import { SWROptions } from "@/lib/swr-const";
@@ -8,7 +9,7 @@ import { SignedIn, SignedOut, useAuth, useUser } from "@clerk/nextjs";
 import html2canvas from "html2canvas";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { IoMdSave } from "react-icons/io";
 import { toast } from "sonner";
 import useSWR, { mutate } from "swr";
@@ -19,30 +20,21 @@ export default function RaceView() {
   const { getToken } = useAuth();
   const { user } = useUser();
   const router = useRouter();
-  const [podium, setPodium] = useState<{
-    [key: string]: Driver | null;
-  }>({
-    "1st": null,
-    "2nd": null,
-    "3rd": null,
-  });
+  const [podium, setPodium] = useState<(Driver | null)[]>([]);
 
-  const handlePlaceChange = (
-    place: "1st" | "2nd" | "3rd",
-    driver: Driver | null
-  ) => {
+  const handlePlaceChange = (index: number, value: Driver | null) => {
     setPodium((prevPodium) => {
       const updatedPodium = { ...prevPodium };
-      updatedPodium[place] !== driver &&
+      updatedPodium[index] !== value &&
         Object.keys(updatedPodium).forEach((place) => {
-          if (updatedPodium[place] === driver) {
-            updatedPodium[place] = null;
+          if (updatedPodium[index] === value) {
+            updatedPodium[index] = null;
           }
         });
 
-      updatedPodium[place] === driver
-        ? (updatedPodium[place] = null)
-        : (updatedPodium[place] = driver);
+      updatedPodium[index] === value
+        ? (updatedPodium[index] = null)
+        : (updatedPodium[index] = value);
       return updatedPodium;
     });
   };
@@ -66,11 +58,22 @@ export default function RaceView() {
     { ...SWROptions }
   );
 
+  const { data: predictionData, isValidating: predictionIsValidating } = useSWR(
+    `predictions/podium/race/${id}/me`,
+    async (url) => {
+      const token = await getToken();
+      const { data } = await httpClient.get(url, { token: token! });
+      return data.podium;
+    },
+    { ...SWROptions }
+  );
+
+  console.log(predictionData);
+
   const { trigger, isMutating } = useSWRMutation(
     "/predictions",
     async (url: string) => {
       const token = await getToken();
-      console.log(token, podium);
 
       await httpClient.post(url, {
         body: {
@@ -84,7 +87,13 @@ export default function RaceView() {
     }
   );
 
-  if (driverIsValidating || raceIsValidating)
+  useEffect(() => {
+    if (!predictionIsValidating && predictionData) {
+      setPodium(predictionData);
+    }
+  }, [predictionData, predictionIsValidating]);
+
+  if (driverIsValidating || raceIsValidating || predictionIsValidating)
     return (
       <div className="flex flex-grow justify-center items-center">
         Loading...
@@ -136,42 +145,7 @@ export default function RaceView() {
           </div>
         ) : null}
         <div className="relative pt-24 flex justify-center items-end gap-x-2">
-          <div
-            onClick={() => handlePlaceChange("2nd", null)}
-            style={{ background: podium["2nd"]?.team.teamColor }}
-            className="cursor-pointer relative h-52 w-40 bg-f1-black-lighter rounded-t-lg p-4 text-2xl font-bold"
-          >
-            2ND
-            {podium["2nd"] ? (
-              <div className="absolute -top-10 w-full text-center inset-x-0">
-                {podium["2nd"].fullName.split(" ")[1].substring(0, 3)}
-              </div>
-            ) : null}
-          </div>
-          <div
-            onClick={() => handlePlaceChange("1st", null)}
-            style={{ background: podium["1st"]?.team.teamColor }}
-            className="cursor-pointer relative h-60 w-40 bg-f1-black-lighter rounded-t-lg p-4 text-2xl font-bold"
-          >
-            1ST
-            {podium["1st"] ? (
-              <div className="absolute -top-10 w-full text-center inset-x-0">
-                {podium["1st"].fullName.split(" ")[1].substring(0, 3)}
-              </div>
-            ) : null}
-          </div>
-          <div
-            onClick={() => handlePlaceChange("3rd", null)}
-            style={{ background: podium["3rd"]?.team.teamColor }}
-            className="cursor-pointer relative h-44 w-40 bg-f1-black-lighter rounded-t-lg p-4 text-2xl font-bold"
-          >
-            3RD
-            {podium["3rd"] ? (
-              <div className="absolute -top-10 w-full text-center inset-x-0">
-                {podium["3rd"].fullName.split(" ")[1].substring(0, 3)}
-              </div>
-            ) : null}
-          </div>
+          <Podium podium={podium} isEditable handleChange={handlePlaceChange} />
         </div>
         <div className="flex justify-center">
           <p className="opacity-60 text-xs mt-8 text-center md:w-1/2">
@@ -199,19 +173,19 @@ export default function RaceView() {
                 </div>
                 <div className="ml-auto flex items-center gap-x-4 text-xl select-none">
                   <button
-                    onClick={() => handlePlaceChange("1st", driver)}
+                    onClick={() => handlePlaceChange(0, driver)}
                     className="text-trophy-gold cursor-pointer"
                   >
                     P1
                   </button>
                   <button
-                    onClick={() => handlePlaceChange("2nd", driver)}
+                    onClick={() => handlePlaceChange(1, driver)}
                     className="text-trophy-silver cursor-pointer"
                   >
                     P2
                   </button>
                   <button
-                    onClick={() => handlePlaceChange("3rd", driver)}
+                    onClick={() => handlePlaceChange(2, driver)}
                     className="text-trophy-bronze cursor-pointer"
                   >
                     P3

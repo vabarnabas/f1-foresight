@@ -2,13 +2,19 @@ import { Driver } from "@/types/driver.types";
 import React from "react";
 
 interface Props {
-  podium: Driver[];
+  podium: (Driver | null)[];
+  handleChange?: (index: number, value: Driver | null) => void;
+  isEditable?: boolean;
 }
 
-export default function Podium({ podium }: Props) {
+export default function Podium({ podium, isEditable, handleChange }: Props) {
+  const safeHandleChange = (index: number, value: Driver | null) =>
+    isEditable && handleChange && handleChange(index, value);
+
   return (
     <div className="relative pt-24 flex justify-center items-end gap-x-2">
       <div
+        onClick={() => safeHandleChange(1, null)}
         style={{ background: podium[1]?.team.teamColor }}
         className="cursor-pointer relative h-40 md:h-52 w-40 text-center bg-f1-black-lighter rounded-t-lg p-4 text-2xl font-bold"
       >
@@ -20,6 +26,7 @@ export default function Podium({ podium }: Props) {
         ) : null}
       </div>
       <div
+        onClick={() => safeHandleChange(0, null)}
         style={{ background: podium[0]?.team.teamColor }}
         className="cursor-pointer relative h-48 md:h-60 w-40 text-center bg-f1-black-lighter rounded-t-lg p-4 text-2xl font-bold"
       >
@@ -31,6 +38,7 @@ export default function Podium({ podium }: Props) {
         ) : null}
       </div>
       <div
+        onClick={() => safeHandleChange(2, null)}
         style={{ background: podium[2]?.team.teamColor }}
         className="cursor-pointer relative h-32 text-center md:h-44 w-40 bg-f1-black-lighter rounded-t-lg p-4 text-2xl font-bold"
       >

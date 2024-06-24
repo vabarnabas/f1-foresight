@@ -12,6 +12,8 @@ import useSWRMutation from "swr/mutation";
 import { useAuth } from "@clerk/nextjs";
 import { toast } from "sonner";
 import Markdown from "react-markdown";
+import { FaArrowLeft } from "react-icons/fa";
+import Link from "next/link";
 
 export default function SpecificPrediction() {
   const { id } = useParams();
@@ -37,7 +39,7 @@ export default function SpecificPrediction() {
         token: token!,
       });
       return data;
-    }
+    },
   );
 
   if (predictionIsValidating)
@@ -49,12 +51,17 @@ export default function SpecificPrediction() {
 
   return (
     <div>
-      <p className="text-3xl font-bold">Analyze Prediction</p>
+      <p className="text-3xl font-bold flex items-center gap-x-2">
+        <Link href="/predictions">
+          <FaArrowLeft className="text-2xl" />
+        </Link>
+        Analyze Prediction
+      </p>
       <div className="flex flex-col gap-y-2 mt-8">
         {predictionData ? (
-          <div className="">
+          <div className="flex flex-col">
             <PodiumCard
-              noButton
+              nonClickable
               id={predictionData.id}
               raceId={predictionData.raceId}
               userId={predictionData.userId}
@@ -81,6 +88,7 @@ export default function SpecificPrediction() {
                   }}
                   className="px-4 py-2.5 rounded-md text-xs bg-white hover:bg-slate-200 text-f1-black flex items-center gap-x-1"
                 >
+                  <RiSparkling2Fill className="text-lg" />
                   ANALYZE
                 </button>
               }

@@ -10,13 +10,14 @@ import useSWR from "swr";
 import Podium from "./podium";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface Props {
   id: string;
   raceId: string;
   userId: string;
   noBackground?: boolean;
-  noButton?: boolean;
+  nonClickable?: boolean;
 }
 
 export default function PodiumCard({
@@ -24,7 +25,7 @@ export default function PodiumCard({
   raceId,
   userId,
   noBackground,
-  noButton,
+  nonClickable,
 }: Props) {
   const router = useRouter();
   const { getToken } = useAuth();
@@ -45,9 +46,13 @@ export default function PodiumCard({
   }
 
   return (
-    <div
+    <Link
+      aria-disabled={nonClickable}
+      tabIndex={nonClickable ? -1 : undefined}
+      href={`/predictions/${id}`}
       className={clsx(
-        !noBackground && "bg-f1-black-lighter pt-6 px-6 rounded-lg"
+        !noBackground && "bg-f1-black-lighter pt-6 px-6 rounded-lg",
+        nonClickable && "pointer-events-none"
       )}
     >
       {data && data.race ? (
@@ -68,18 +73,9 @@ export default function PodiumCard({
               <p className="">{`${data.race.country} - ${data.race.city}`}</p>
             </div>
           </div>
-          {!noButton ? (
-            <button
-              onClick={async () => router.push(`/predictions/${id}`)}
-              className="px-4 py-2.5 rounded-md text-xs bg-white hover:bg-slate-200 text-f1-black flex items-center gap-x-1"
-            >
-              <RiSparkling2Fill className="text-lg" />
-              ANALYZE
-            </button>
-          ) : null}
         </div>
       ) : null}
       {data && data.podium ? <Podium podium={data.podium} /> : null}
-    </div>
+    </Link>
   );
 }

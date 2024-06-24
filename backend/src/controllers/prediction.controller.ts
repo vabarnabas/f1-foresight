@@ -41,10 +41,50 @@ PredictionController.get("/race/:raceId", async (c) => {
   return c.json(predictions);
 });
 
+PredictionController.get("/race/:raceId/me", async (c) => {
+  const { raceId } = c.req.param();
+
+  const user = getAuth(c);
+
+  if (!user?.userId) return c.json({ message: "Unauthorized" }, 401);
+
+  const predictions = await predictionService.findByRaceAndUser(
+    raceId,
+    user.userId
+  );
+  return c.json(predictions);
+});
+
 PredictionController.get("/podium/race/:raceId/user/:userId", async (c) => {
   const { raceId, userId } = c.req.param();
 
   const prediction = await predictionService.findByRaceAndUser(raceId, userId);
+
+  if (!prediction) {
+    return c.json({ message: "Prediction Not Found" }, 404);
+  }
+
+  const race = await raceService.findSpecific(raceId);
+
+  if (!race) {
+    return c.json({ message: "Race Not Found" }, 404);
+  }
+
+  const podium = await predictionService.findPodium(prediction);
+  return c.json({ podium, race });
+});
+
+PredictionController.get("/podium/race/:raceId/me", async (c) => {
+  const { raceId } = c.req.param();
+
+  const user = getAuth(c);
+
+  if (!user?.userId) return c.json({ message: "Unauthorized" }, 401);
+
+  const prediction = await predictionService.findByRaceAndUser(
+    raceId,
+    user.userId
+  );
 
   if (!prediction) {
     return c.json({ message: "Prediction Not Found" }, 404);
