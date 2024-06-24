@@ -14,40 +14,57 @@ export const size = {
 export const contentType = "image/png";
 
 export default async function Image({ params }: { params: { id: string } }) {
-  const { getToken } = auth();
-  const token = await getToken();
+  const { data } = await httpClient.get(`/predictions/podium/${params.id}`);
 
-  const { data: prediction } = await httpClient.get(
-    `/predictions/${params.id}`,
-    { token: token! }
+  const { podium, race } = data;
+
+  const f1Font = fetch(new URL("/public/font/f1.ttf", import.meta.url)).then(
+    (res) => res.arrayBuffer()
   );
-
-  console.log(prediction);
-
-  // const { data: podium } = await httpClient.get(
-  //   `/predictions/podium/race/${prediction.raceId}/user/${prediction.userId}`,
-  //   { token: token! }
-  // );
-
-  const f1Font = fetch(
-    new URL("/public/font/f1_black.woff2", import.meta.url)
-  ).then((res) => res.arrayBuffer());
 
   return new ImageResponse(
     (
-      // ImageResponse JSX element
-      <div
-        style={{
-          fontSize: 128,
-          background: "white",
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        {JSON.stringify(prediction)}
+      <div tw="flex flex-col h-full w-full justify-end items-center bg-[#16161B] text-white">
+        <h1 tw="absolute text-lg -bottom-1 right-4">
+          F1® Foresight <span tw="text-[#e92300]">24</span>
+        </h1>
+        <div tw="flex">
+          <h2 tw="flex flex-col mb-64 text-left">
+            <span tw="text-3xl">{race.name}</span>
+            <span tw="mt-2 text-lg">{`${race.country} / ${race.city}`}</span>
+          </h2>
+        </div>
+        {podium ? (
+          <div tw="flex items-end">
+            <div
+              style={{ backgroundColor: podium[1].team.teamColor }}
+              tw="relative h-52 w-48 bg-white flex mr-2 rounded-t-lg text-3xl p-4 justify-center"
+            >
+              2ND
+              <p tw="absolute -top-20">
+                {podium[1].fullName.split(" ")[1].substring(0, 3)}
+              </p>
+            </div>
+            <div
+              style={{ backgroundColor: podium[0].team.teamColor }}
+              tw="relative h-64 w-48 bg-white flex mr-2 rounded-t-lg text-3xl p-4 justify-center"
+            >
+              1ST
+              <p tw="absolute -top-20">
+                {podium[0].fullName.split(" ")[1].substring(0, 3)}
+              </p>
+            </div>
+            <div
+              style={{ backgroundColor: podium[2].team.teamColor }}
+              tw="relative h-48 w-48 bg-white flex rounded-t-lg text-3xl p-4 justify-center"
+            >
+              3RD
+              <p tw="absolute -top-20">
+                {podium[2].fullName.split(" ")[1].substring(0, 3)}
+              </p>
+            </div>
+          </div>
+        ) : null}
       </div>
     ),
     // ImageResponse options
